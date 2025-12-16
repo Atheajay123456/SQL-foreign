@@ -1,0 +1,280 @@
+ MySQL  localhost:33060+ ssl  SQL > show databases;
++--------------------+
+| Database           |
++--------------------+
+| employeedetails    |
+| information_schema |
+| institute          |
+| management         |
+| mchsmanagement     |
+| mysql              |
+| performance_schema |
+| student            |
+| sys                |
++--------------------+
+9 rows in set (0.0176 sec)
+ MySQL  localhost:33060+ ssl  SQL > use student;
+Default schema set to `student`.
+Fetching global names, object names from `student` for auto-completion... Press ^C to stop.
+ MySQL  localhost:33060+ ssl  student  SQL > show tables;
++-------------------+
+| Tables_in_student |
++-------------------+
+| mark1             |
+| mark2             |
+| marks             |
+| student_record    |
+| studentinfo       |
++-------------------+
+5 rows in set (0.0036 sec)
+ MySQL  localhost:33060+ ssl  student  SQL > select *from student_record;
++--------+--------+------------------+-----+---------+
+| stu_id | name   | email            | age | clgname |
++--------+--------+------------------+-----+---------+
+|      1 | ajay   | ajay@gmail.com   |  22 | guru    |
+|      2 | sanjay | sanjay@gmail.com |  22 | gnitc   |
+|      3 | saketh | saketh@gmail.com |  22 | gnit    |
+|      5 | ram    | ram@gmail.com    |  22 | guru    |
++--------+--------+------------------+-----+---------+
+4 rows in set (0.0582 sec)
+ MySQL  localhost:33060+ ssl  student  SQL > create table student(roln int primary key,name varchar(20) not null);
+Query OK, 0 rows affected (0.0758 sec)
+ MySQL  localhost:33060+ ssl  student  SQL > desc student;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| roln  | int         | NO   | PRI | NULL    |       |
+| name  | varchar(20) | NO   |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+2 rows in set (0.0197 sec)
+ MySQL  localhost:33060+ ssl  student  SQL > create table marks(s_id int, marks int,foreign key(s_id) reference student(roln));
+ERROR: 1064: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'reference student(roln))' at line 1
+ MySQL  localhost:33060+ ssl  student  SQL > create table marks(s_id int, marks int,foreign key(s_id) references student(roln));
+ERROR: 1050: Table 'marks' already exists
+ MySQL  localhost:33060+ ssl  student  SQL > create table marks1(s_id int, marks int,foreign key(s_id) references student(roln));
+Query OK, 0 rows affected (0.0736 sec)
+ MySQL  localhost:33060+ ssl  student  SQL > insert into student values(1,"ajay"),(2,"vijay");
+Query OK, 2 rows affected (0.0132 sec)
+
+Records: 2  Duplicates: 0  Warnings: 0
+ MySQL  localhost:33060+ ssl  student  SQL > select * from student;
++------+-------+
+| roln | name  |
++------+-------+
+|    1 | ajay  |
+|    2 | vijay |
++------+-------+
+2 rows in set (0.0011 sec)
+ MySQL  localhost:33060+ ssl  student  SQL > insert into marks1(1,20),(2,30);
+ERROR: 1064: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '1,20),(2,30)' at line 1
+ MySQL  localhost:33060+ ssl  student  SQL > insert into marks1 values(1,20),(2,30);
+Query OK, 2 rows affected (0.0207 sec)
+
+Records: 2  Duplicates: 0  Warnings: 0
+ MySQL  localhost:33060+ ssl  student  SQL > select * from marks1;
++------+-------+
+| s_id | marks |
++------+-------+
+|    1 |    20 |
+|    2 |    30 |
++------+-------+
+2 rows in set (0.0011 sec)
+ MySQL  localhost:33060+ ssl  student  SQL > delete from student where roln=1;
+ERROR: 1451: Cannot delete or update a parent row: a foreign key constraint fails (`student`.`marks1`, CONSTRAINT `marks1_ibfk_1` FOREIGN KEY (`s_id`) REFERENCES `student` (`roln`))
+ MySQL  localhost:33060+ ssl  student  SQL > delete from student where roln=1;
+ERROR: 1451: Cannot delete or update a parent row: a foreign key constraint fails (`student`.`marks1`, CONSTRAINT `marks1_ibfk_1` FOREIGN KEY (`s_id`) REFERENCES `student` (`roln`))
+ MySQL  localhost:33060+ ssl  student  SQL > insert into marks1 values(1,20),(2,30);
+Records: 2  Duplicates: 0  Warnings: 0
+ MySQL  localhost:33060+ ssl  student  SQL > select * from marks1;
++------+-------+
+| s_id | marks |
++------+-------+
+|    1 |    20 |
+|    2 |    30 |
++------+-------+
+2 rows in set (0.0011 sec)
+ MySQL  localhost:33060+ ssl  student  SQL > delete from student where roln=1;
+ERROR: 1451: Cannot delete or update a parent row: a foreign key constraint fails (`student`.`marks1`, CONSTRAINT `marks1_ibfk_1` FOREIGN KEY (`s_id`) REFERENCES `student` (`roln`))
+ MySQL  localhost:33060+ ssl  student  SQL > delete from student where roln=1;
+ERROR: 1451: Cannot delete or update a parent row: a foreign key constraint fails (`student`.`marks1`, CONSTRAINT `marks1_ibfk_1` FOREIGN KEY (`s_id`) REFERENCES `student` (`roln`))
+ MySQL  localhost:33060+ ssl  student  SQL > desc student;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| roln  | int         | NO   | PRI | NULL    |       |
+| name  | varchar(20) | NO   |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+2 rows in set (0.0055 sec)
+ MySQL  localhost:33060+ ssl  student  SQL > desc marks;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| id    | int         | YES  | MUL | NULL    |       |
+| name  | varchar(20) | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+2 rows in set (0.0043 sec)
+ MySQL  localhost:33060+ ssl  student  SQL > alter table marks add foreign key(id) references student(roln);
+Query OK, 0 rows affected (0.1568 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+ MySQL  localhost:33060+ ssl  student  SQL > show create table marks;
++-------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Table | Create Table                                                                                                                                                                                                                                                                                                                                 |
++-------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| marks | CREATE TABLE `marks` (
+  `id` int DEFAULT NULL,
+  `name` varchar(20) DEFAULT NULL,
+  KEY `id` (`id`),
+  CONSTRAINT `marks_ibfk_1` FOREIGN KEY (`id`) REFERENCES `student_record` (`stu_id`),
+  CONSTRAINT `marks_ibfk_2` FOREIGN KEY (`id`) REFERENCES `student` (`roln`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci |
++-------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.0017 sec)
+ MySQL  localhost:33060+ ssl  student  SQL >
+
+
+
+ create table students(rollno int ,marks int);
+Query OK, 0 rows affected (0.0443 sec)
+ MySQL  localhost:33060+ ssl  student  SQL > alter table students rename column marks to name;
+Query OK, 0 rows affected (0.0410 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+ MySQL  localhost:33060+ ssl  student  SQL > alter table students modify name varchar(20);
+Query OK, 0 rows affected (0.0944 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+ MySQL  localhost:33060+ ssl  student  SQL > desc students;
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| rollno | int         | YES  |     | NULL    |       |
+| name   | varchar(20) | YES  |     | NULL    |       |
++--------+-------------+------+-----+---------+-------+
+2 rows in set (0.0037 sec)
+ MySQL  localhost:33060+ ssl  student  SQL > insert into students values(1,"ram"),(2,"laxman");
+Query OK, 2 rows affected (0.0150 sec)
+
+Records: 2  Duplicates: 0  Warnings: 0
+ MySQL  localhost:33060+ ssl  student  SQL > select*from students;
++--------+--------+
+| rollno | name   |
++--------+--------+
+|      1 | ram    |
+|      2 | laxman |
++--------+--------+
+2 rows in set (0.0012 sec)
+ MySQL  localhost:33060+ ssl  student  SQL > create table marks6(s_id int ,marks int,foreign key(s_id) references students(rollno) on delete cascade);
+ERROR: 1822: Failed to add the foreign key constraint. Missing index for constraint 'marks6_ibfk_1' in the referenced table 'students'
+ MySQL  localhost:33060+ ssl  student  SQL > ALTER TABLE students
+                                          -> ADD PRIMARY KEY (rollno);
+Query OK, 0 rows affected (0.1163 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+ MySQL  localhost:33060+ ssl  student  SQL > create table marks6(s_id int ,marks int,foreign key(s_id) references students(rollno) on delete cascade);
+Query OK, 0 rows affected (0.0687 sec)
+ MySQL  localhost:33060+ ssl  student  SQL > insert into marks6 values(1,22),(2,30);
+Query OK, 2 rows affected (0.0113 sec)
+
+Records: 2  Duplicates: 0  Warnings: 0
+ MySQL  localhost:33060+ ssl  student  SQL > select*from marks6;
++------+-------+
+| s_id | marks |
++------+-------+
+|    1 |    22 |
+|    2 |    30 |
++------+-------+
+2 rows in set (0.0013 sec)
+ MySQL  localhost:33060+ ssl  student  SQL > delete from students where rollno=1;
+Query OK, 1 row affected (0.0153 sec)
+ MySQL  localhost:33060+ ssl  student  SQL > select*from students;
++--------+--------+
+| rollno | name   |
++--------+--------+
+|      2 | laxman |
++--------+--------+
+1 row in set (0.0007 sec)
+ MySQL  localhost:33060+ ssl  student  SQL > select*from marks6;
++------+-------+
+| s_id | marks |
++------+-------+
+|    2 |    30 |
++------+-------+
+1 row in set (0.0012 sec)
+ MySQL  localhost:33060+ ssl  student  SQL >
+ MySQL  localhost:33060+ ssl  student  SQL > desc marks6;
++-------+------+------+-----+---------+-------+
+| Field | Type | Null | Key | Default | Extra |
++-------+------+------+-----+---------+-------+
+| s_id  | int  | YES  | MUL | NULL    |       |
+| marks | int  | YES  |     | NULL    |       |
++-------+------+------+-----+---------+-------+
+2 rows in set (0.0037 sec)
+ MySQL  localhost:33060+ ssl  student  SQL > show create table marks6;
++--------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Table  | Create Table                                                                                                                                                                                                                                                                  |
++--------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| marks6 | CREATE TABLE `marks6` (
+  `s_id` int DEFAULT NULL,
+  `marks` int DEFAULT NULL,
+  KEY `s_id` (`s_id`),
+  CONSTRAINT `marks6_ibfk_1` FOREIGN KEY (`s_id`) REFERENCES `students` (`rollno`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci |
++--------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.0019 sec)
+ MySQL  localhost:33060+ ssl  student  SQL > alter table marks6 drop foreign key marks6_ibfk_1;
+Query OK, 0 rows affected (0.0304 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+ MySQL  localhost:33060+ ssl  student  SQL > desc marks6;
++-------+------+------+-----+---------+-------+
+| Field | Type | Null | Key | Default | Extra |
++-------+------+------+-----+---------+-------+
+| s_id  | int  | YES  | MUL | NULL    |       |
+| marks | int  | YES  |     | NULL    |       |
++-------+------+------+-----+---------+-------+
+2 rows in set (0.0038 sec)
+ MySQL  localhost:33060+ ssl  student  SQL > show create table marks6;
++--------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Table  | Create Table                                                                                                                                                            |
++--------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| marks6 | CREATE TABLE `marks6` (
+  `s_id` int DEFAULT NULL,
+  `marks` int DEFAULT NULL,
+  KEY `s_id` (`s_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci |
++--------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.0014 sec)
+ MySQL  localhost:33060+ ssl  student  SQL > desc students;
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| rollno | int         | NO   | PRI | NULL    |       |
+| name   | varchar(20) | YES  |     | NULL    |       |
++--------+-------------+------+-----+---------+-------+
+2 rows in set (0.0052 sec)
+ MySQL  localhost:33060+ ssl  student  SQL > desc marks6;
++-------+------+------+-----+---------+-------+
+| Field | Type | Null | Key | Default | Extra |
++-------+------+------+-----+---------+-------+
+| s_id  | int  | YES  | MUL | NULL    |       |
+| marks | int  | YES  |     | NULL    |       |
++-------+------+------+-----+---------+-------+
+2 rows in set (0.0042 sec)
+ MySQL  localhost:33060+ ssl  student  SQL > alter table marks6 add foreign key(s_id) references students(rollno);
+Query OK, 1 row affected (0.0928 sec)
+
+Records: 1  Duplicates: 0  Warnings: 0
+ MySQL  localhost:33060+ ssl  student  SQL > show create table marks6;
++--------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Table  | Create Table                                                                                                                                                                                                                                                |
++--------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| marks6 | CREATE TABLE `marks6` (
+  `s_id` int DEFAULT NULL,
+  `marks` int DEFAULT NULL,
+  KEY `s_id` (`s_id`),
+  CONSTRAINT `marks6_ibfk_1` FOREIGN KEY (`s_id`) REFERENCES `students` (`rollno`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci |
++--------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.0008 sec)
+ MySQL  localhost:33060+ ssl  student  SQL >
